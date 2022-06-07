@@ -1,8 +1,13 @@
 const router = require("express").Router()
 
+const Rocket = require("../model/spaceSchema")
+
+const client = require("../helper/redis_int")
+
+
 //@desc post a new rocket detials
 //@route /create/rocket
-const Rocket = require("../model/spaceSchema")
+
 router.post("/create/rocket",async(req,res)=>{
     try {
         const {launchedDate,location,orbit,launchedStatus,rocket,
@@ -41,6 +46,8 @@ res.json("sucessfully added a rocket")
 
 router.get("/all/rockets",async(req,res)=>{
     try {
+
+
         //pagintion
         let {page,size}=req.query
         if(!page){
@@ -54,6 +61,15 @@ router.get("/all/rockets",async(req,res)=>{
         const status = req.query.status
         let rockets
         if(!status){
+            // console.log(status);
+            const value = await client.get(`rockets${page}${size}${status}`);
+            console.log(value);
+
+            if(value){
+                console.log("from cache",JSON.parse(value));
+                rockets=JSON.parse(value)
+            }else{
+                console.log("from db");
             rockets = await Rocket.find({},{
                 launchedStatus:1,
                 location:1,
@@ -64,7 +80,16 @@ router.get("/all/rockets",async(req,res)=>{
 
             }).limit(limit).skip(skip)
             console.log(rockets.length);
+        }
+    
         }else{
+            const value = await client.get(`rockets${page}${size}${status}`);
+            console.log(value);
+            if(value){
+                console.log("from cache",JSON.parse(value));
+                rockets=JSON.parse(value)
+
+            }else{
             rockets = await Rocket.find({launchedStatus:status},{
                 launchedStatus:1,
                 location:1,
@@ -74,10 +99,14 @@ router.get("/all/rockets",async(req,res)=>{
                 rocket:1
             
             }).limit(limit).skip(skip)
+        }
 
         }
-    
-    res.json({
+        await client.SET(`rockets${page}${size}${status}`,JSON.stringify(rockets),'EX',5);
+
+        // console.log("data",await client.GET(`rockets${page}${size}${status}`));
+
+         res.json({
         rockets,
         page,
         size:rockets.length
@@ -94,7 +123,12 @@ router.get("/single/rocket/:id",async(req,res)=>{
     try {
         
     const id = req.params.id
+    const value = await client.GET(`rocket${id}`)
+    if(value){
+        return res.json(JSON.parse(value))
+    }
     const singleRocket = await Rocket.findById(id)
+    await client.SET(`rocket${id}`,JSON.stringify(singleRocket),'EX',5*60);
     res.json(singleRocket)
     } catch (err) {
         res.status(500).json({error:"Internal Server Error"})

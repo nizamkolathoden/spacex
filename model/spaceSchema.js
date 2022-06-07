@@ -17,9 +17,7 @@ const spacexSchema = new mongoose.Schema({
     },
     PavloadType:String,
     launchSite:String,
-    No:{
-        type:Number
-    },
+    
     launchedDate:{
         type:Date
     },
