@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+// const client = require("../helper/redis_int")
 
 
 
@@ -16,14 +17,14 @@ module.exports = {
 
                 const options = {
                     issuer: "Ganit",
-                    // expiresIn: '2h',
+                     expiresIn: '2h',
                 }
 
                 jwt.sign(payload, secret, options, (err, token) => {
 
                     if (err) {
                         console.error(err.message)
-                        reject({ message: 'Un Authrized User', code: 401 })
+                        reject({ message: 'Un Authrized User1', code: 401 })
                     }
 
                     resolve(token);
@@ -34,6 +35,10 @@ module.exports = {
         }
 
     },
+
+    
+
+    
     
     verifyUserAccessToken: (req, res, next) => {
 

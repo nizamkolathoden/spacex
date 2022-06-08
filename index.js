@@ -15,9 +15,9 @@ app.get("/test",verifyUserAccessToken,(req,res)=>{
     res.json("hello there")
 })
 
-app.use("/all",require("./routes/allRouter"))
-app.use("/",require("./routes/spacexRouter"))
 app.use("/auth",require("./routes/authRouter"))
+app.use("/all",require("./routes/allRouter"))
+app.use("/",verifyUserAccessToken,require("./routes/spacexRouter"))
 
 
 app.listen(PORT,()=>console.log(`server running on port ${PORT}`))
