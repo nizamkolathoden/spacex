@@ -5,41 +5,6 @@ const Rocket = require("../model/spaceSchema")
 const client = require("../helper/redis_int")
 
 
-//@desc post a new rocket detials
-//@route /create/rocket
-
-router.post("/create/rocket",async(req,res)=>{
-    try {
-        const {launchedDate,location,orbit,launchedStatus,rocket,
-            mission,FlightNumber,RocketTvpe,Manufacturer,
-            Nationality,PavloadType,desc}=req.body
-
-    const newRocket = await new Rocket({
-        mission,
-        FlightNumber,
-        RocketTvpe,
-        Manufacturer,
-        Nationality,
-        PavloadType,
-        desc,
-        launchedDate,
-        location,
-        orbit,
-        launchedStatus,
-        rocket
-    }).save()
-
-    console.log(newRocket);
-res.json("sucessfully added a rocket")
-
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({error:"Internal Server Error"})
-    }
-    
-    
-})
-
 
 //@desc get all rockets
 //@route /all/rockets
@@ -102,7 +67,10 @@ router.get("/all/rockets",async(req,res)=>{
         }
 
         }
-        await client.SET(`rockets${page}${size}${status}`,JSON.stringify(rockets),'EX',5);
+        await client.SET(`rockets${page}${size}${status}`,JSON.stringify(rockets),{
+            EX:10,
+            NX:true
+        });
 
         // console.log("data",await client.GET(`rockets${page}${size}${status}`));
 
@@ -128,7 +96,10 @@ router.get("/single/rocket/:id",async(req,res)=>{
         return res.json(JSON.parse(value))
     }
     const singleRocket = await Rocket.findById(id)
-    await client.SET(`rocket${id}`,JSON.stringify(singleRocket),'EX',5*60);
+    await client.SET(`rocket${id}`,JSON.stringify(singleRocket),{
+        EX:10,
+        NX:true
+    });
     res.json(singleRocket)
     } catch (err) {
         res.status(500).json({error:"Internal Server Error"})
