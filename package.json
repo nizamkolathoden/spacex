@@ -8,18 +8,20 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.5",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.16",
     "redis": "^4.1.0"
   },
-  "name": "test",
+  "name": "spacex",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index"
+    "start": "node app",
+    "dev": "nodemon app"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
 }

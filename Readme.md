@@ -91,4 +91,3 @@ eg:
 localhost:8080/all/rockets?page=1&size=3
 ```
 <img width="1440" alt="Screenshot 2022-06-08 at 2 51 37 PM" src="https://user-images.githubusercontent.com/59057736/172581491-0a4aaf58-517b-4bc8-83a6-2798b0d8ce89.png">
-

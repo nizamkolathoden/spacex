@@ -1,9 +1,8 @@
 const {createClient} = require('redis');
-const { startSession } = require('../model/spaceSchema');
 
 const client = createClient({
-    port:process.env.redisPort,
-    host:process.env.redisHost
+    url: 'redis://:@redis:6379'    
+
 })
 
 

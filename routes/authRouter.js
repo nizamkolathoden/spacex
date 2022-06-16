@@ -85,9 +85,9 @@ router.post("/login",registerValidator, async(req, res) => {
             return res.json({ error: error[0].msg })
         }
     const userFound = await User.findOne({ email });
-console.log(userFound._id);
     if (!userFound)
         return res.status(403).json({ error: "Wrong Username/Password" });
+    console.log(userFound._id);
 
     const isMatch = await bcrypt.compare(password, userFound.password);
 
