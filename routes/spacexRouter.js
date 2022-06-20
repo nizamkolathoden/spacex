@@ -7,7 +7,7 @@ const client = require("../helper/redis_int")
 
 
 //@desc get all rockets
-//@route /all/rockets
+//@route spacex/all/rockets
 
 router.get("/all/rockets",async(req,res)=>{
     try {
@@ -86,7 +86,7 @@ router.get("/all/rockets",async(req,res)=>{
 })
 
 //@desc for geting single rocket
-//route /single/rocket:id
+//route /spacex/single/rocket:id
 router.get("/single/rocket/:id",async(req,res)=>{
     try {
         

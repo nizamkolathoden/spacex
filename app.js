@@ -11,13 +11,13 @@ app.use(morgan('dev'))
 require("./helper/DB")()
 
 //test
-app.get("/test",verifyUserAccessToken,(req,res)=>{
+app.get("/",(req,res)=>{
     res.json("hello there")
 })
 
 app.use("/auth",require("./routes/authRouter"))
 app.use("/all",require("./routes/allRouter"))
-app.use("/",verifyUserAccessToken,require("./routes/spacexRouter"))
+app.use("/spacex",verifyUserAccessToken,require("./routes/spacexRouter"))
 
 
 app.listen(PORT,()=>console.log(`server running on port ${PORT}`))
